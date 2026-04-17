@@ -15,7 +15,7 @@ services:
     restart: unless-stopped
 
   bot:
-    image: yuliitezar/discord-modguard-bot:latest
+    image: ghcr.io/yuliitezarygml/discord-modguard-bot:latest
     environment:
       DISCORD_TOKEN: ${DISCORD_TOKEN}
       DISCORD_APP_ID: ${DISCORD_APP_ID}
@@ -31,7 +31,7 @@ services:
     restart: unless-stopped
 
   frontend:
-    image: yuliitezar/discord-modguard-frontend:latest
+    image: ghcr.io/yuliitezarygml/discord-modguard-frontend:latest
     environment:
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8080}
     ports:

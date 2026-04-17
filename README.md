@@ -82,7 +82,7 @@ docker compose -f docker-compose.prod.yml up -d
 
 The **first account** you register becomes `admin`; subsequent accounts become `moderator`.
 
-Docker Hub page: **https://hub.docker.com/r/yuliitezar/discord-modguard-bot**
+Images are hosted on **GitHub Container Registry**: [ghcr.io/yuliitezarygml/discord-modguard-bot](https://github.com/yuliitezarygml/discord-modguard/pkgs/container/discord-modguard-bot) and [...-frontend](https://github.com/yuliitezarygml/discord-modguard/pkgs/container/discord-modguard-frontend).
 
 ---
 
@@ -286,29 +286,38 @@ Open http://localhost:3000. Hot-reload works out of the box.
 
 ## Publishing Docker images
 
-Push your own builds to Docker Hub:
+Images are published automatically to **GitHub Container Registry** (`ghcr.io`) on every push to `main` and every `v*.*.*` tag — see [.github/workflows/publish.yml](.github/workflows/publish.yml). No manual action required.
+
+Published images:
+
+| Image                                                       | Tags                                        |
+| ----------------------------------------------------------- | ------------------------------------------- |
+| `ghcr.io/yuliitezarygml/discord-modguard-bot`               | `latest`, `main`, `vX.Y.Z`, `sha-<commit>`  |
+| `ghcr.io/yuliitezarygml/discord-modguard-frontend`          | same                                        |
+
+**To publish a versioned release**, push a semver tag:
 
 ```bash
-# Log in once
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+The workflow builds both images multi-arch (`linux/amd64` + `linux/arm64`) and pushes them with `latest`, `v0.1.0`, and `0.1` tags.
+
+**To make images public**, after the first successful publish go to
+`https://github.com/yuliitezarygml?tab=packages` → click a package →
+*Package settings* → *Change visibility* → **Public**.
+
+**Manual build** (if you need to push to Docker Hub or a private registry):
+
+```bash
 docker login
-
-# Build + tag + push
-docker build -t yuliitezar/discord-modguard-bot:latest ./bot
-docker push yuliitezar/discord-modguard-bot:latest
-
-docker build --build-arg NEXT_PUBLIC_API_URL=http://your-host:8080 \
-  -t yuliitezar/discord-modguard-frontend:latest ./frontend
-docker push yuliitezar/discord-modguard-frontend:latest
-```
-
-Multi-arch (AMD64 + ARM64) via buildx:
-```bash
-docker buildx create --use --name modguard || true
 docker buildx build --platform linux/amd64,linux/arm64 \
-  -t yuliitezar/discord-modguard-bot:latest --push ./bot
+  -t <your-registry>/discord-modguard-bot:latest --push ./bot
+docker buildx build --platform linux/amd64,linux/arm64 \
+  --build-arg NEXT_PUBLIC_API_URL=http://your-host:8080 \
+  -t <your-registry>/discord-modguard-frontend:latest --push ./frontend
 ```
-
-After publishing, users can pull via the [Quick start (Docker Hub)](#quick-start-docker-hub) flow using `docker-compose.prod.yml`.
 
 ---
 
