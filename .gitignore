@@ -1,0 +1,43 @@
+# Env
+.env
+.env.local
+.env.staging
+.env.production
+
+# Go
+bot/bot
+bot/bot.exe
+*.test
+*.out
+vendor/
+
+# Node
+frontend/node_modules
+frontend/.next
+frontend/out
+frontend/dist
+frontend/tsconfig.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local Claude / agent state
+.openclaude/
+.claude/
+
+# Docker volumes (local dev)
+postgres_data/

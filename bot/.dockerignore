@@ -1,0 +1,6 @@
+bot
+bot.exe
+*.test
+*.out
+.env
+README.md
